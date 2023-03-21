@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDateTime;
 
 @Slf4j
 @RestController
@@ -22,9 +23,7 @@ public class EmployeeController {
     @Autowired
     private EmployeeService employeeService;
 
-    /*
-    员工登录
-     */
+    //员工登录
     @PostMapping("/login")
     public R<Employee> login(HttpServletRequest request, @RequestBody Employee employee){
 
@@ -64,4 +63,20 @@ public class EmployeeController {
         request.getSession().removeAttribute("employee");
         return R.success("退出成功");
     }
+
+    //新增员工
+    @PostMapping
+    public R<String> save(@RequestBody Employee employee, HttpServletRequest request){
+        log.info("新增员工{}", employee.toString());
+        //设置初始密码123456，并进行md5加密
+        employee.setPassword(DigestUtils.md5DigestAsHex("123456".getBytes()));
+        employee.setCreateTime(LocalDateTime.now());
+        employee.setUpdateTime(LocalDateTime.now());
+        long empId = (long) request.getSession().getAttribute("employee");
+        employee.setCreateUser(empId);
+        employee.setUpdateUser(empId);
+        employeeService.save(employee);
+        return R.success("新增员工成功");
+    }
+
 }
