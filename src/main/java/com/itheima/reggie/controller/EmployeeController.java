@@ -88,9 +88,11 @@ public class EmployeeController {
         LambdaQueryWrapper<Employee> queryWrapper = new LambdaQueryWrapper();
         //添加一个过滤条件
         queryWrapper.like(StringUtils.isNotEmpty(name),Employee::getName,name);
-
+        //添加排序条件
+        queryWrapper.orderByDesc(Employee::getUpdateTime);
         //执行查询
-        return null;
+        employeeService.page(pageInfo,queryWrapper);
+        return R.success(pageInfo);
     }
 
 }
