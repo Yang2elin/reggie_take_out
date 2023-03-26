@@ -12,7 +12,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.xml.ws.WebFault;
 import java.io.IOException;
 
-//检查用户是否完成登录过滤器
+/**
+ * 登录过滤器，拦截所有请求，判断是否登录
+ */
 @Slf4j
 @WebFilter(filterName = "loginCheckFilter", urlPatterns = "/*")
 public class LoginCheckFilter implements Filter {
@@ -59,7 +61,12 @@ public class LoginCheckFilter implements Filter {
 
 
 
-    //路径匹配方法，检测本次请求是否放行
+    /**
+     * 路径匹配方法，判断请求路径是否在不需要处理的路径中
+     * @param urls
+     * @param requestURI
+     * @return
+     */
     public boolean check(String[] urls, String requestURI){
         for (String url : urls){
             boolean match = PATH_MATCHER.match(url, requestURI);

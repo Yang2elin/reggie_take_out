@@ -9,12 +9,18 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.sql.SQLIntegrityConstraintViolationException;
 
-//全局异常处理，底层基于代理
+/**
+ * 全局异常处理类
+ */
 @ControllerAdvice(annotations = {RestController.class, Controller.class})
 @ResponseBody
 @Slf4j
 public class GlobalExceptionHandler {
-    //异常处理方法
+    /**
+     * 处理SQLIntegrityConstraintViolationException异常
+     * @param ex
+     * @return
+     */
     @ExceptionHandler(SQLIntegrityConstraintViolationException.class)
     public R<String> exceptionHandler(SQLIntegrityConstraintViolationException ex){
         log.error(ex.getMessage());

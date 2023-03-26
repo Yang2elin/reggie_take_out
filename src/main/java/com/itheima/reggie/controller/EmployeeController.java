@@ -22,7 +22,12 @@ public class EmployeeController {
     @Autowired
     private EmployeeService employeeService;
 
-    //员工登录
+    /**
+     * 员工登录
+     * @param request
+     * @param employee
+     * @return
+     */
     @PostMapping("/login")
     public R<Employee> login(HttpServletRequest request, @RequestBody Employee employee){
 
@@ -55,7 +60,11 @@ public class EmployeeController {
         return R.success(emp);
     }
 
-    //员工退出
+    /**
+     * 员工退出
+     * @param request
+     * @return
+     */
     @PostMapping("/logout")
     public R<String> logout(HttpServletRequest request){
         //清理session中保存的当前登录的员工id
@@ -63,7 +72,12 @@ public class EmployeeController {
         return R.success("退出成功");
     }
 
-    //新增员工
+    /**
+     * 新增员工
+     * @param employee
+     * @param request
+     * @return
+     */
     @PostMapping
     public R<String> save(@RequestBody Employee employee, HttpServletRequest request){
         log.info("新增员工{}", employee.toString());
@@ -78,7 +92,13 @@ public class EmployeeController {
         return R.success("新增员工成功");
     }
 
-    //员工信息分页查询
+    /**
+     * 员工信息分页查询
+     * @param page
+     * @param pageSize
+     * @param name
+     * @return
+     */
     @GetMapping("/page")
     public R<Page> page(int page, int pageSize, String name){
         log.info("page={},pageSize={},name={}", page,pageSize,name);
@@ -93,6 +113,22 @@ public class EmployeeController {
         //执行查询
         employeeService.page(pageInfo,queryWrapper);
         return R.success(pageInfo);
+    }
+
+    /**
+     * 根据id修改员工，禁用就是status=0，启用就是status=1
+     * @param employee
+     * @param request
+     * @return
+     */
+    @PutMapping
+    public  R<String> update(@RequestBody Employee employee, HttpServletRequest request){
+        log.info("修改员工{}", employee.toString());
+        employee.setUpdateTime(LocalDateTime.now());
+        long empId = (long) request.getSession().getAttribute("employee");
+        employee.setUpdateUser(empId);
+        employeeService.updateById(employee);
+        return R.success("修改员工成功");
     }
 
 }
