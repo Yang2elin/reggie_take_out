@@ -6,6 +6,9 @@ import com.itheima.reggie.mapper.EmployeeMapper;
 import com.itheima.reggie.service.EmployeeService;
 import org.springframework.stereotype.Service;
 
+/**
+ * 员工实现类,继承ServiceImpl,实现EmployeeService接口
+ */
 @Service
 public class EmployeeServiceImpl extends ServiceImpl<EmployeeMapper, Employee> implements EmployeeService {
 }
